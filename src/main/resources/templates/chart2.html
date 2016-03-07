@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Chart2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="/static/js/jquery-2.2.1.js" th:src="@{/js/jquery-2.2.1.js}"></script>
+<script src="/static/js/highcharts.js" th:src="@{/js/highcharts.js}"></script>
+<script src="/static/js/exporting.js" th:src="@{/js/exporting.js}"></script>
+<script src="/static/js/data.js" th:src="@{/js/data.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function() {
+		$(document)
+				.ready(
+						function() {
+							var csv = [], x;
+
+							Highcharts.setOptions({
+								global : {
+									useUTC : true
+								}
+							});
+
+							//var data = 'time,count\n18:01:00,3\n18:01:01,4';
+
+							$.get('/getData', function(data) {
+								var obj = JSON.parse(data);
+
+								$.each(obj, function(line, index) {
+									if (line) {
+										useUTC: false;
+										x = line.source.split(':');
+										csv.push([
+												Date.UTC(2015, 1, 1, x[0],
+														x[1], x[2]),
+												parseFloat(line.byteCount) ]);
+									}
+								});
+							});
+
+							console.log(csv);
+
+							$('#container')
+									.highcharts(
+											{
+												chart : {
+													renderTo : 'container',
+													type : 'spline',
+													animation : Highcharts.svg, // don't animate in old IE
+													marginRight : 10,
+													useUTC : false,
+													events : {
+														load : function() {
+
+															// set up the updating of the chart each second
+															var series = this.series[0];
+
+															setInterval(
+																	function() {
+																		var l = series.data.length - 1, lastX = series.data[l].x;
+
+																		$
+																				.get(
+																						'/getData',
+																						function(
+																								data) {
+																							//var lines = data.split('\n'),
+																							obj = JSON
+																									.parse(data);
+																									len = obj.length,
+																									items = lines[len - 1],
+																									x = items[0]
+																											.split(':'),
+																									y = parseFloat(items[1]);
+																							useUTC: false;
+																							x = Date
+																									.UTC(
+																											2015,
+																											1,
+																											1,
+																											x[0],
+																											x[1],
+																											x[2]);
+
+																							if (x !== lastX) {
+																								series
+																										.addPoint(
+																												[
+																														x,
+																														y ],
+																												true,
+																												true);
+																							}
+																						});
+																	}, 1000); //refresh each 1 second
+														}
+													}
+												},
+												title : {
+													text : 'TPS Data'
+												},
+												xAxis : {
+													type : 'datetime',
+													tickPixelInterval : 150
+												},
+												yAxis : {
+													title : {
+														text : 'Value'
+													},
+													plotLines : [ {
+														value : 3,
+														width : 1,
+														color : '#808080'
+													} ]
+												},
+												tooltip : {
+													formatter : function() {
+														return '<b>'
+																+ this.series.name
+																+ '</b><br/>'
+																+ Highcharts
+																		.dateFormat(
+																				'%H:%M:%S',
+																				this.x)
+																+ '<br/>'
+																+ Highcharts
+																		.numberFormat(
+																				this.y,
+																				2);
+													}
+												},
+												legend : {
+													enabled : false
+												},
+												exporting : {
+													enabled : false
+												},
+												series : [ {
+													name : 'Count',
+													data : csv
+												} ]
+											});
+
+							//});
+						});
+	});
+	/*]]>*/
+</script>
+</head>
+<body>
+	<div id="container"
+		style="min-width: 50px; height: 200px; margin: 0 auto"></div>
+</body>
+</html>
