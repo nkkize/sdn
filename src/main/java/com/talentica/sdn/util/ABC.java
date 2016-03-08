@@ -119,9 +119,9 @@ public class ABC extends ApplicationFrame {
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
 
-        //final Thread updater = demo.new UpdaterThread();
-        //updater.setDaemon(true);
-       // updater.start();
+        final Thread updater = demo.new UpdaterThread();
+        updater.setDaemon(true);
+       updater.start();
     }
 	
 	/**
