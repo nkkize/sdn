@@ -46,18 +46,35 @@ public class GraphController {
 		return model;
 	}
 	
-	@RequestMapping("/chart2")
+	@RequestMapping("/chart3")
 	public ModelAndView greetingSS() {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("chart2");
+		model.setViewName("chart3");
+		return model;
+	}
+	
+	@RequestMapping("/plot")
+	public ModelAndView plotChart() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("plot");
 		return model;
 	}
 
-	@RequestMapping("/plotGraph")
+	@RequestMapping("/")
 	public ModelAndView plotGraph() {
 		ModelAndView model = new ModelAndView();
+		DataController dataController = new DataController();
+		dataController.startProducer();
 		model.setViewName("welcome");
 		return model;
+	}
+	
+	@RequestMapping(value="/naren", method = RequestMethod.GET)
+	public @ResponseBody List<DataDictionary> consumer() {
+		DataController dataController = new DataController();
+		//System.out.println(dataController.copyQueueIntoList());
+		dataController.startConsumer();
+		return dataController.getTempList();
 	}
 	
 	@RequestMapping("/high")
@@ -65,11 +82,6 @@ public class GraphController {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("highchartCSV");
 		return model;
-	}
-	
-	@RequestMapping("/file")
-	public File file() {
-		return new File("D://sampleCSV.csv");
 	}
 	
 	@RequestMapping(value = "/plot", method = RequestMethod.POST)
@@ -126,42 +138,5 @@ public class GraphController {
 			
 		}
 		return dataDictionaryList;
-	}
-	
-	@RequestMapping(value="/getFirstData", method = RequestMethod.GET)
-	public @ResponseBody List<DataDictionary> getFirstDataInJSON() {
-		List<DataDictionary> dataDictionaryList = new ArrayList<DataDictionary>();
-		BufferedInputStream bis;
-		FileInputStream fis;
-		File file = new File("D://sampleCSV.csv"); // The CSV file.
-		file = file.getAbsoluteFile();
-		String path = String.valueOf(file);
-		try {
-			DataInputStream dis = null;
-			String record = null;
-			int recCount = 0;
-			File f = new File(path);
-			fis = new FileInputStream(f);
-			bis = new BufferedInputStream(fis);
-			dis = new DataInputStream(bis);
-			record = dis.readLine();
-			while ((record = dis.readLine()) != null) {
-				String values = record;
-				String comma = ",";
-				int location = values.indexOf(comma);
-				String xvalue = values.substring(0, location);
-				String yvalue = values.substring(location + 1);
-				DataDictionary dataDictionary = new DataDictionary();
-				dataDictionary.setSource(xvalue);
-				dataDictionary.setByteCount(Integer.parseInt(yvalue));
-				dataDictionaryList.add(dataDictionary);
-				readRec++;
-				System.out.println(readRec);
-				}
-		  } catch (Exception e) {
-		}finally{
-			
-		}
-		return dataDictionaryList;
-	}
+	}	
 }

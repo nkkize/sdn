@@ -17,7 +17,7 @@
 				csv.push([parseInt(element.source),parseInt(element.byteCount) ]);
 		    });
 		}); */
-		for(i = 0 ; i < 4; i++){
+		for(i = 0 ; i < 2; i++){
 			csv.push([i,i+1]);
 		}
 		console.log(csv);
@@ -34,10 +34,10 @@
 				// set up the updating of the chart each second
 				var series = this.series[0];
 				setInterval(function() {
-					$.getJSON('/getData', function(data) {
+					$.getJSON('/naren', function(data) {
 						if(data.lengh !== 0){
 						$.each(data, function(index, element) {
-							series.addPoint([parseInt(element.source),parseInt(element.byteCount)],true,true);
+							series.addPoint([parseInt(element.source),parseInt(element.byteCount)],true,false);
 					    });
 						}
 					});
