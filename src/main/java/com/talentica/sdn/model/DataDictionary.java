@@ -9,16 +9,16 @@ package com.talentica.sdn.model;
  */
 public class DataDictionary {
 	
-	private String source;
+	private String timeString;
 	
 	private int byteCount;
 
-	public String getSource() {
-		return source;
+	public String getTimeString() {
+		return timeString;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setTimeString(String timeString) {
+		this.timeString = timeString;
 	}
 
 	public int getByteCount() {

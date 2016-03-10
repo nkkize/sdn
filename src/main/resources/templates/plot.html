@@ -14,7 +14,7 @@
 			var csv = [], x;
 	/* $.getJSON('/getFirstData', function(data) {
 		    $.each(data, function(index, element) {
-				csv.push([parseInt(element.source),parseInt(element.byteCount) ]);
+				csv.push([parseInt(element.timeString),parseInt(element.byteCount) ]);
 		    });
 		}); */
 		/* for(i = 0 ; i < 2; i++){
@@ -36,7 +36,7 @@
 		      var items = line.split(',');
 		      useUTC: false;
 		      x = items[0].split(':');
-		      csv.push([Date.UTC(2015,1,1,x[0],x[1],x[2]), parseInt(items[1])]);
+		      csv.push([Date.UTC(2016,3,10,x[0],x[1],x[2]), parseInt(items[1])]);
 		    }
 		  });
 		console.log(csv);
@@ -56,7 +56,7 @@
 					$.getJSON('/getData', function(data) {
 						if(data.lengh !== 0){
 						$.each(data, function(index, element) {
-							item = element.source;
+							item = element.timeString;
 							y = parseFloat(element.byteCount);
 							useUTC: false;
 							x = item.split(':');

@@ -3,6 +3,7 @@
  */
 package com.talentica.sdn.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -33,15 +34,16 @@ public class GraphController {
 		ModelAndView model = new ModelAndView();
 		DataProvider dataController = new DataProvider();
 		dataController.startProducer();
+		dataController.startConsumer();
 		model.setViewName("welcome");
 		return model;
 	}
 	
 	@RequestMapping(value="/getData", method = RequestMethod.GET)
 	public @ResponseBody List<DataDictionary> consumer() {
+		List<DataDictionary> plotList = new ArrayList<DataDictionary>();
 		DataProvider dataController = new DataProvider();
-		//System.out.println(dataController.copyQueueIntoList());
-		dataController.startConsumer();
-		return dataController.getTempList();
+		dataController.copyAndResetList(plotList);
+		return plotList;
 	}	
 }
