@@ -76,13 +76,11 @@ class Producer implements Runnable {
 				while ((record = bufferedReader.readLine()) != null) {
 					recCount++;
 					if (recCount > readRec) {
-						String values = record;
-						String comma = ",";
-						int location = values.indexOf(comma);
-						String timeString = values.substring(0, location);
-						String byteCount = values.substring(location + 1);
+						String[] values = record.split(",");
+						String timeString = values[0];
+						String byteCount = values[6];
 						DataDictionary dataDictionary = new DataDictionary();
-						dataDictionary.setTimeString(timeString);
+						dataDictionary.setTimeString(timeString.substring(0,timeString.indexOf(".")));
 						dataDictionary.setByteCount(Integer.parseInt(byteCount));
 						readRec++;
 						System.out.println(readRec);
