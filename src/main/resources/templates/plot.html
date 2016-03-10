@@ -11,15 +11,34 @@
 	/*<![CDATA[*/
 	$(function() {
 	$(document).ready(function() {
-			var csv = [];
+			var csv = [], x;
 	/* $.getJSON('/getFirstData', function(data) {
 		    $.each(data, function(index, element) {
 				csv.push([parseInt(element.source),parseInt(element.byteCount) ]);
 		    });
 		}); */
-		for(i = 0 ; i < 2; i++){
+		/* for(i = 0 ; i < 2; i++){
 			csv.push([i,i+1]);
-		}
+		} */
+		Highcharts.setOptions({
+		    global: {
+		      useUTC: true
+		    }
+		  });
+
+		  var data = 'time,count\n18:01:01,3\n18:01:02,7';
+
+		  //$.get('data.csv', function(data) {
+		  var lines = data.split('\n');
+
+		  $.each(lines, function(lineNo, line) {
+		    if(lineNo > 0) {
+		      var items = line.split(',');
+		      useUTC: false;
+		      x = items[0].split(':');
+		      csv.push([Date.UTC(2015,1,1,x[0],x[1],x[2]), parseInt(items[1])]);
+		    }
+		  });
 		console.log(csv);
 
 	$('#container').highcharts({
@@ -34,14 +53,18 @@
 				// set up the updating of the chart each second
 				var series = this.series[0];
 				setInterval(function() {
-					$.getJSON('/naren', function(data) {
+					$.getJSON('/getData', function(data) {
 						if(data.lengh !== 0){
 						$.each(data, function(index, element) {
-							series.addPoint([parseInt(element.source),parseInt(element.byteCount)],true,false);
+							item = element.source;
+							y = parseFloat(element.byteCount);
+							useUTC: false;
+							x = item.split(':');
+							series.addPoint([Date.UTC(2015,1,1,x[0],x[1],x[2]),y],true,false);
 					    });
 						}
 					});
-				}, 2000); //refresh each 2 second
+				}, 1000); //refresh each 2 second
 			  }
 			}
 		},
@@ -49,7 +72,7 @@
 			text : 'Test Data'
 		},
 		xAxis : {
-			type : 'X-value',
+			type : 'datetime',
 			tickPixelInterval : 150
 		},
 		yAxis : {
@@ -63,13 +86,13 @@
 			} ]
 		},
 		tooltip : {
-			formatter : function() {
-				return '<b>'
-				+ this.series.name
-				+ '</b><br/>'
-				+ Highcharts.numberFormat(this.x,2)
-				+ '<br/>'
-				+ Highcharts.numberFormat(this.y,2);
+			formatter: function () {
+           		 return '<b>' 
+           		 + this.series.name 
+           		 + '</b><br/>' 
+           		 + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) 
+           		 + '<br/>' 
+           		 + Highcharts.numberFormat(this.y, 2);
 			}
 		},
 		legend : {
