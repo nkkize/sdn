@@ -16,21 +16,16 @@
 	$(function() {
 	$(document).ready(function() {
 			var csv = [], x;
-	/* $.getJSON('/getFirstData', function(data) {
-		    $.each(data, function(index, element) {
-				csv.push([parseInt(element.timeString),parseInt(element.byteCount) ]);
-		    });
-		}); */
 		/* for(i = 0 ; i < 2; i++){
 			csv.push([i,i+1]);
 		} */
-		//Highcharts.setOptions({
-		   // global: {
-		     // useUTC: true
-		    //}
-		  //});
+		Highcharts.setOptions({
+		    global: {
+		     useUTC: true
+		    }
+		  });
 
-		 /*  var data = 'time,count\n12:16:01.072093,2600\n12:16:02.072093,1000';
+		   /* var data = 'time,count\n12:16:01.072093,2600\n12:16:02.072093,1000';
 
 		  //$.get('data.csv', function(data) {
 		  var lines = data.split('\n');
@@ -38,19 +33,21 @@
 		  $.each(lines, function(lineNo, line) {
 		    if(lineNo > 0) {
 		      var items = line.split(',');
-		      //useUTC: false;
-		      //x = items[0].split(':');
-		      csv.push([items[0], parseInt(items[1])]);
+		       useUTC: false;
+		       x = items[0].split('.');
+		       t = x[0].split(':');
+		      csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),parseInt(items[1]) ]);
 		    }
 		  }); */
 		  $.getJSON('/loadCSV', function(data) {
 				if(data.lengh !== 0){
 				$.each(data, function(index, element) {
-					//item = element.timeString;
-					y = parseFloat(element.byteCount);
-					//useUTC: false;
-					//x = item.split(':');
-					 csv.push([element.timeString,y],true,false);
+					items = element.timeString;
+					useUTC: false;
+					x = items.split('.');
+					t = x[0].split(':');
+					y = parseInt(element.byteCount);
+					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
 			    });
 				}
 			});
@@ -71,11 +68,12 @@
 					$.getJSON('/getData', function(data) {
 						if(data.lengh !== 0){
 						$.each(data, function(index, element) {
-							//item = element.timeString;
-							y = parseFloat(element.byteCount);
-							//useUTC: false;
-							//x = item.split(':');
-							series.addPoint([element.timeString,y],true,false);
+							items = element.timeString;
+							useUTC: false;
+							x = items.split('.');
+							t = x[0].split(':');
+							y = parseInt(element.byteCount);
+							series.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
 					    });
 						}
 					});
@@ -103,11 +101,12 @@
 		tooltip : {
 			formatter: function () {
            		 return '<b>' 
-           		 + this.series.name 
+           		+ this.series.name 
            		 + '</b><br/>' 
-           		 + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) 
-           		 + '<br/>' 
-           		 + Highcharts.numberFormat(this.y, 2);
+           		 + Highcharts.dateFormat('%H:%M:%S.%L', this.x) 
+           		 + ' time, ' 
+           		 + this.y
+           		 + ' bytes';
 			}
 		},
 		legend : {

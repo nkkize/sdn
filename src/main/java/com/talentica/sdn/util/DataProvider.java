@@ -80,7 +80,7 @@ class Producer implements Runnable {
 						String timeString = values[0];
 						String byteCount = values[6];
 						DataDictionary dataDictionary = new DataDictionary();
-						dataDictionary.setTimeString(timeString.substring(0,timeString.indexOf(".")));
+						dataDictionary.setTimeString(timeString);
 						dataDictionary.setByteCount(Integer.parseInt(byteCount));
 						readRec++;
 						System.out.println(readRec);
