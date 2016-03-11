@@ -3,10 +3,60 @@
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<script src="/static/js/jquery-2.2.1.js" th:src="@{/js/jquery-2.2.1.js}"></script>
+<script src="/static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="/static/js/jquery.validate.min.js" th:src="@{/js/jquery.validate.min.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	
+		var isFilePathValid = true;
+		
+		jQuery.validator.addMethod("checkForFilePath", function(value, element) {
+			var regex = new RegExp("(.*?)\.(csv|CSV)$");
+			if(!(regex.test(value))) {
+				isFilePathValid = false;
+			}
+			return isFilePathValid;
+        }, "");
+        
+        
+		// Validation
+		$("#plot").validate({
+			rules : {
+				filePath : {
+					required : true,
+					checkForFilePath : true
+				}
+			},
+
+			messages : {
+				filePath : {
+					required : "Please enter the path.",
+					checkForFilePath : "Only CSV files are supported."
+				},
+			},
+
+			errorClass : "help-inline",
+			errorElement : "span",
+			highlight : function(element, errorClass, validClass) {
+				$(element).parents('.form-group').addClass('has-error');
+			},
+			unhighlight : function(element, errorClass, validClass) {
+				$(element).parents('.form-group').removeClass('has-error');
+				$(element).parents('.form-group').addClass('has-success');
+			},
+			errorPlacement : function(error, element) {
+				if (element.parent('.input-group').length) {
+					error.insertAfter(element.parent());
+				} else {
+					error.insertAfter(element);
+				}
+			}
+		});
+	});
+</script>
 </head>
 <body>
 	<div id="headerMenu">
@@ -24,8 +74,7 @@
 			<!-- Collection of nav links and other content for toggling -->
 			<div id="navbarCollapse" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">Home</a></li>
-					<li><a href="/plot">Dynamics</a></li>
+					<li class="active"><a href="/">Dynamics</a></li>
 					<li><a href="/dashboard">Dashboard</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -34,7 +83,30 @@
 			</div>
 		</nav>
 	</div>
-	<div class="container" style="margin-top: 120px;">
+	<div class="container"  style="margin-top:30px;">
+		<div class="row">
+			<div class="span8">
+				<form class="form-horizontal" id="plot" method='post' action="/plot">
+					<fieldset>
+						<legend>Plot Chart</legend>
+						<p class="help-block">Please enter path to OpenNetMon output csv file in below text box and click on plot.</p>
+						<div class="form-group">
+							<label class="control-label col-sm-2">File Path : </label>
+							<div class="col-sm-3">
+								<input type="text" class="input-xlarge form-control" id="filePath" name="filePath" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<div class="col-sm-2" style="margin-left: -12px;">
+									<button type="submit" class="btn btn-default">Plot</button>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

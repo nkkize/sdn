@@ -20,18 +20,17 @@ public class DataProvider {
 	// Creating shared object
 	private static BlockingQueue<DataDictionary> sharedQueue = new LinkedBlockingQueue<DataDictionary>();
 	private static List<DataDictionary> tempList = new ArrayList<>();
-	File file = new File("D:\\sampleCSV.csv");
-	// Creating Producer and Consumer Thread
-	private Thread producer = new Thread(new Producer(file, sharedQueue));
-	private Thread consumer = new Thread(new Consumer(sharedQueue, tempList));
 	
 	// Starting Producer thread
-	public void startProducer() {
+	public void startProducer(String filePath) {
+		File file = new File(filePath);
+		Thread producer = new Thread(new Producer(file, sharedQueue));
 		producer.start();
 	}
 	
 	// Starting Consumer thread
 	public void startConsumer(){
+		Thread consumer = new Thread(new Consumer(sharedQueue, tempList));
 		consumer.start();
 	}
 	
@@ -59,6 +58,7 @@ class Producer implements Runnable {
 	private static int readRec = 0;
 	BufferedReader bufferedReader;
 	FileReader fileReader;
+	int count = 0;
 
 	public Producer(File file, BlockingQueue<DataDictionary> sharedQueue) {
 		this.file = file;

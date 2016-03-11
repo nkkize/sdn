@@ -12,35 +12,19 @@
 <script src="/static/js/exporting.js" th:src="@{/js/exporting.js}"></script>
 <script src="/static/js/data.js" th:src="@{/js/data.js}"></script>
 <script type="text/javascript" th:inline="javascript">
-	/*<![CDATA[*/
-	$(function() {
-	$(document).ready(function() {
-			var csv = [], x;
-		/* for(i = 0 ; i < 2; i++){
-			csv.push([i,i+1]);
-		} */
-		Highcharts.setOptions({
-		    global: {
-		     useUTC: true
-		    }
+/*<![CDATA[*/
+$(document).ready(function() {
+	var csv = [], x;
+
+	Highcharts.setOptions({
+		global: {
+			useUTC: true
+			}
 		  });
 
-		   /* var data = 'time,count\n12:16:01.072093,2600\n12:16:02.072093,1000';
-
-		  //$.get('data.csv', function(data) {
-		  var lines = data.split('\n');
-
-		  $.each(lines, function(lineNo, line) {
-		    if(lineNo > 0) {
-		      var items = line.split(',');
-		       useUTC: false;
-		       x = items[0].split('.');
-		       t = x[0].split(':');
-		      csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),parseInt(items[1]) ]);
-		    }
-		  }); */
-		  $.getJSON('/loadCSV', function(data) {
-				if(data.lengh !== 0){
+	$.getJSON('/loadCSV', function(data) {		
+			  console.log(data);
+			  if(data.lengh !== 0){
 				$.each(data, function(index, element) {
 					items = element.timeString;
 					useUTC: false;
@@ -50,19 +34,18 @@
 					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
 			    });
 				}
-			});
-		console.log(csv);
+			}); 
+	console.log(csv);
 
-	$('#container').highcharts({
+	$('#chart').highcharts({
 		chart : {
 			renderTo : 'container',
 			type : 'spline',
-			animation : Highcharts.svg, // don't animate in old IE
+			animation : Highcharts.svg,
 			marginRight : 10,
 			useUTC : false,
 			events : {
 				load : function() {
-				// set up the updating of the chart each second
 				var series = this.series[0];
 				setInterval(function() {
 					$.getJSON('/getData', function(data) {
@@ -77,7 +60,7 @@
 					    });
 						}
 					});
-				}, 1000); //refresh each 2 second
+				}, 1000); //refresh each 1 second
 			  }
 			}
 		},
@@ -122,8 +105,7 @@
 		
 	});
 	});
-	});
-	/*]]>*/
+/*]]>*/
 </script>
 </head>
 <body>
@@ -142,8 +124,7 @@
 			<!-- Collection of nav links and other content for toggling -->
 			<div id="navbarCollapse" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="/">Home</a></li>
-					<li  class="active"><a href="/plot">Dynamics</a></li>
+					<li class="active"><a href="/">Dynamics</a></li>
 					<li><a href="/dashboard">Dashboard</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -152,7 +133,15 @@
 			</div>
 		</nav>
 	</div>
-	<div id="container"
-		style="min-width: 50px; height: 200px; margin: 0 auto"></div>
+	<div class="container">
+		<div class="row">
+			<div class="span8">
+				<fieldset>
+					<legend>Chart</legend>
+					<div id="chart" style="min-width: 50px; height: 200px; margin: 0 auto"></div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
