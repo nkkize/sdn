@@ -83,18 +83,17 @@ class Producer implements Runnable {
 						dataDictionary.setTimeString(timeString);
 						dataDictionary.setByteCount(Integer.parseInt(byteCount));
 						readRec++;
-						System.out.println(readRec);
 						sharedQueue.put(dataDictionary);
 					}
 				}
 			} catch (Exception e) {
+				Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, "Exception occured in producer", e);
 			} finally {
 				try {
 					fileReader.close();
 					bufferedReader.close();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, e);
 				}
 			}
 		}
@@ -118,7 +117,7 @@ class Consumer implements Runnable {
 				DataDictionary dataDictionary = (DataDictionary)sharedQueue.take();
 				tempList.add(dataDictionary);
 			} catch (Exception ex) {
-				Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, "Exception occured while consuming data", ex);
 			}
 		}
 	}
