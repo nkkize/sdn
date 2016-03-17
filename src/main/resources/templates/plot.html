@@ -27,11 +27,11 @@ $(document).ready(function() {
 					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
 			    });
 				}
-			}); 
-	console.log(csv);
+			});
 
 	$('#chart').highcharts({
 		chart : {
+			zoomType: 'x',
 			renderTo : 'container',
 			type : 'spline',
 			animation : Highcharts.svg,
@@ -60,6 +60,10 @@ $(document).ready(function() {
 		title : {
 			text : 'Data Transfer vs Time'
 		},
+		subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
 		xAxis : {
 			type : 'datetime',
 			tickPixelInterval : 150
@@ -108,7 +112,7 @@ $(document).ready(function() {
 			<div class="span8">
 				<fieldset>
 					<legend>Chart</legend>
-					<div id="chart" style="min-width: 50px; height: 200px; margin: 0 auto"></div>
+					<div id="chart" style="min-width: 50px; height: 300px; margin: 0 auto"></div>
 				</fieldset>
 			</div>
 		</div>
