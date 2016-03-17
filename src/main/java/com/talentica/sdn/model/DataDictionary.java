@@ -8,10 +8,12 @@ package com.talentica.sdn.model;
  *
  */
 public class DataDictionary {
-	
+
 	private String timeString;
-	
+
 	private int byteCount;
+
+	private int tpSource;
 
 	public String getTimeString() {
 		return timeString;
@@ -27,5 +29,13 @@ public class DataDictionary {
 
 	public void setByteCount(int byteCount) {
 		this.byteCount = byteCount;
+	}
+
+	public int getTpSource() {
+		return tpSource;
+	}
+
+	public void setTpSource(int tpSource) {
+		this.tpSource = tpSource;
 	}
 }

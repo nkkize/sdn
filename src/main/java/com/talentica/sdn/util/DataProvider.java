@@ -77,11 +77,10 @@ class Producer implements Runnable {
 					recCount++;
 					if (recCount > readRec) {
 						String[] values = record.split(",");
-						String timeString = values[0];
-						String byteCount = values[6];
 						DataDictionary dataDictionary = new DataDictionary();
-						dataDictionary.setTimeString(timeString);
-						dataDictionary.setByteCount(Integer.parseInt(byteCount));
+						dataDictionary.setTimeString(values[0]);
+						dataDictionary.setByteCount(Integer.parseInt(values[6]));
+						dataDictionary.setTpSource(Integer.parseInt(values[13]));
 						readRec++;
 						sharedQueue.put(dataDictionary);
 					}

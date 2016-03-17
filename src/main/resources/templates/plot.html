@@ -40,6 +40,7 @@ $(document).ready(function() {
 			events : {
 				load : function() {
 				var series = this.series[0];
+				var series1 = this.series[1];
 				setInterval(function() {
 					$.getJSON('/getData', function(data) {
 						if(data.lengh !== 0){
@@ -50,6 +51,7 @@ $(document).ready(function() {
 							t = x[0].split(':');
 							y = parseInt(element.byteCount);
 							series.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
+							series1.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
 					    });
 						}
 					});
@@ -68,16 +70,22 @@ $(document).ready(function() {
 			type : 'datetime',
 			tickPixelInterval : 150
 		},
-		yAxis : {
+		yAxis : [{
 			title : {
 			text : 'Bytes'
 			},
-			plotLines : [ {
-			value : 3,
-			width : 1,
-			color : '#808080'
-			} ]
-		},
+			height: 200,
+            lineWidth: 2,
+            offset:0
+		},{
+			title : {
+			text : 'Shuffle Bytes'
+			},
+			height: 200,
+            top: 300,
+            lineWidth: 2,            
+            offset:0
+		}],
 		tooltip : {
 			formatter: function () {
            		 return '<b>' 
@@ -97,6 +105,11 @@ $(document).ready(function() {
 		},
 		series : [ {
 			name : 'bytes',
+			yAxis: 0,
+			data : csv
+		},{
+			name : 'shuffle bytes',
+			yAxis: 1,
 			data : csv
 		} ]
 		
@@ -112,7 +125,7 @@ $(document).ready(function() {
 			<div class="span8">
 				<fieldset>
 					<legend>Chart</legend>
-					<div id="chart" style="min-width: 50px; height: 300px; margin: 0 auto"></div>
+					<div id="chart" style="min-width: 50px; height: 600px; margin: 0 auto"></div>
 				</fieldset>
 			</div>
 		</div>
