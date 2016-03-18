@@ -7,7 +7,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
-	var csv = [], x;
+	var csv = [], shuffleData = [], newSources= [], newSeriesArray = [], x, count = 0;
 
 	Highcharts.setOptions({
 		global: {
@@ -24,12 +24,13 @@ $(document).ready(function() {
 					x = items.split('.');
 					t = x[0].split(':');
 					y = parseInt(element.byteCount);
+					tpSource = parseInt(element.tpSource);
 					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
 			    });
 				}
 			});
 
-	$('#chart').highcharts({
+	var chart = new Highcharts.Chart({
 		chart : {
 			zoomType: 'x',
 			renderTo : 'container',
@@ -40,7 +41,6 @@ $(document).ready(function() {
 			events : {
 				load : function() {
 				var series = this.series[0];
-				var series1 = this.series[1];
 				setInterval(function() {
 					$.getJSON('/getData', function(data) {
 						if(data.lengh !== 0){
@@ -50,8 +50,23 @@ $(document).ready(function() {
 							x = items.split('.');
 							t = x[0].split(':');
 							y = parseInt(element.byteCount);
+							tpSource = parseInt(element.tpSource);
 							series.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
-							series1.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
+							if(tpSource == 13562){
+								newSource = element.newSource;
+								if($.inArray(newSource, newSources) == -1){
+									newSources.push(newSource);
+									chart.addSeries({
+										yAxis: 1,
+										name: '' + newSource + '',
+					                });
+									newSeriesArray.push(chart.series[++count]);
+									chart.series[count].addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
+								}
+								else{
+									newSeriesArray[newSources.indexOf(newSource)].addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
+								}
+							}
 					    });
 						}
 					});
@@ -98,18 +113,22 @@ $(document).ready(function() {
 			}
 		},
 		legend : {
-			enabled : false
+			enabled : true
 		},
 		exporting : {
 			enabled : false
 		},
+		plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
 		series : [ {
 			name : 'bytes',
 			yAxis: 0,
-			data : csv
-		},{
-			name : 'shuffle bytes',
-			yAxis: 1,
 			data : csv
 		} ]
 		
@@ -125,7 +144,7 @@ $(document).ready(function() {
 			<div class="span8">
 				<fieldset>
 					<legend>Chart</legend>
-					<div id="chart" style="min-width: 50px; height: 600px; margin: 0 auto"></div>
+					<div id="container" style="min-width: 50px; height: 600px; margin: 0 auto"></div>
 				</fieldset>
 			</div>
 		</div>

@@ -14,6 +14,8 @@ public class DataDictionary {
 	private int byteCount;
 
 	private int tpSource;
+	
+	private String newSource;
 
 	public String getTimeString() {
 		return timeString;
@@ -37,5 +39,13 @@ public class DataDictionary {
 
 	public void setTpSource(int tpSource) {
 		this.tpSource = tpSource;
+	}
+
+	public String getNewSource() {
+		return newSource;
+	}
+
+	public void setNewSource(String newSource) {
+		this.newSource = newSource;
 	}
 }
