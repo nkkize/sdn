@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,6 +92,7 @@ public class GraphController {
 		File file = new File(filePath);
 		BufferedReader bufferedReader = null;
 		FileReader fileReader = null;
+		Map<String, String> edgeConnectivityMap  = Constants.edgeConnectivityMap; 
 		try {
 			fileReader = new FileReader(file);
 			bufferedReader = new BufferedReader(fileReader);
@@ -99,12 +101,14 @@ public class GraphController {
 			while ((record = bufferedReader.readLine()) != null) {
 				recCount++;
 				String[] values = record.split(",");
+				if(values[1].equalsIgnoreCase(edgeConnectivityMap.get(values[3]))){
 				DataDictionary dataDictionary = new DataDictionary();
 				dataDictionary.setTimeString(values[0]);
 				dataDictionary.setNewSource(values[2]);
 				dataDictionary.setByteCount(Integer.parseInt(values[6]));
-				dataDictionary.setTpSource(Integer.parseInt(values[13]));
+				dataDictionary.setTpSource(Integer.parseInt(values[13]));				
 				plotList.add(dataDictionary);
+				}
 			}
 		} catch (Exception e) {
 			Logger.getLogger(GraphController.class.getName()).log(Level.SEVERE, "Exception occured while loading initial data", e);

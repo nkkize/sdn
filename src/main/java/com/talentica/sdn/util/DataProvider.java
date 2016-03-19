@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -59,7 +60,7 @@ class Producer implements Runnable {
 	BufferedReader bufferedReader;
 	FileReader fileReader;
 	int count = 0;
-
+	Map<String, String> edgeConnectivityMap  = Constants.edgeConnectivityMap;
 	public Producer(File file, BlockingQueue<DataDictionary> sharedQueue) {
 		this.file = file;
 		this.sharedQueue = sharedQueue;
@@ -77,13 +78,15 @@ class Producer implements Runnable {
 					recCount++;
 					if (recCount > readRec) {
 						String[] values = record.split(",");
+						readRec++;
+						if(values[1].equalsIgnoreCase(edgeConnectivityMap.get(values[3]))){
 						DataDictionary dataDictionary = new DataDictionary();
 						dataDictionary.setTimeString(values[0]);
 						dataDictionary.setNewSource(values[2]);
 						dataDictionary.setByteCount(Integer.parseInt(values[6]));
 						dataDictionary.setTpSource(Integer.parseInt(values[13]));
-						readRec++;
 						sharedQueue.put(dataDictionary);
+						}
 					}
 				}
 			} catch (Exception e) {
