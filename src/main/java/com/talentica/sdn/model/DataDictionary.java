@@ -18,6 +18,8 @@ public class DataDictionary {
 	private String newSource;
 	
 	private String newDest;
+	
+	private int tpDest;
 
 	public String getTimeString() {
 		return timeString;
@@ -57,5 +59,13 @@ public class DataDictionary {
 
 	public void setNewDest(String newDest) {
 		this.newDest = newDest;
+	}
+
+	public int getTpDest() {
+		return tpDest;
+	}
+
+	public void setTpDest(int tpDest) {
+		this.tpDest = tpDest;
 	}
 }

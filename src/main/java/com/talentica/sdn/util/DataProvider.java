@@ -83,8 +83,10 @@ class Producer implements Runnable {
 						DataDictionary dataDictionary = new DataDictionary();
 						dataDictionary.setTimeString(values[0]);
 						dataDictionary.setNewSource(values[2]);
+						dataDictionary.setNewDest(values[3]);
 						dataDictionary.setByteCount(Integer.parseInt(values[6]));
 						dataDictionary.setTpSource(Integer.parseInt(values[13]));
+						dataDictionary.setTpDest(Integer.parseInt(values[14]));
 						sharedQueue.put(dataDictionary);
 						}
 					}
