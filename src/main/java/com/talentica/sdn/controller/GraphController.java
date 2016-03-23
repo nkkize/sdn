@@ -50,6 +50,13 @@ public class GraphController {
 		
 	}
 	
+	@RequestMapping(value = "/analysis")
+	public ModelAndView showAnalysis() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("analysis");
+		return model;
+	}
+	
 	@RequestMapping("/aboutus")
 	public ModelAndView showAboutUs() {
 		ModelAndView model = new ModelAndView();
@@ -69,6 +76,14 @@ public class GraphController {
 		List<DataDictionary> plotList = new ArrayList<DataDictionary>();
 		DataProvider dataProvider = new DataProvider();
 		dataProvider.copyAndResetList(plotList);
+		return plotList;
+	}
+	
+	@RequestMapping(value = "/analyse", method = RequestMethod.GET)
+	public @ResponseBody List<DataDictionary> analyseData() {
+		List<DataDictionary> plotList = new ArrayList<DataDictionary>();
+		DataProvider dataProvider = new DataProvider();
+		dataProvider.copyAnalysisList(plotList);
 		return plotList;
 	}
 	

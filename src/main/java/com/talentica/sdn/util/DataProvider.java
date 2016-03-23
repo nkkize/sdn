@@ -21,11 +21,12 @@ public class DataProvider {
 	// Creating shared object
 	private static BlockingQueue<DataDictionary> sharedQueue = new LinkedBlockingQueue<DataDictionary>();
 	private static List<DataDictionary> tempList = new ArrayList<>();
+	private static List<DataDictionary> analysisList = new ArrayList<>();
 	
 	// Starting Producer thread
 	public void startProducer(String filePath) {
 		File file = new File(filePath);
-		Thread producer = new Thread(new Producer(file, sharedQueue));
+		Thread producer = new Thread(new Producer(file, sharedQueue, analysisList));
 		producer.start();
 	}
 	
@@ -50,20 +51,28 @@ public class DataProvider {
 	public static void setTempList(List<DataDictionary> tempList) {
 		DataProvider.tempList = tempList;
 	}
+
+	public void copyAnalysisList(List<DataDictionary> plotList) {
+		for (DataDictionary dataDictionary : this.analysisList){
+			plotList.add(dataDictionary);
+		}		
+	}
 }
 
 //Producer
 class Producer implements Runnable {
 	private final BlockingQueue<DataDictionary> sharedQueue;
+	private final List<DataDictionary> analysisList;
 	File file;
 	private static int readRec = 0;
 	BufferedReader bufferedReader;
 	FileReader fileReader;
 	int count = 0;
 	Map<String, String> edgeConnectivityMap  = Constants.edgeConnectivityMap;
-	public Producer(File file, BlockingQueue<DataDictionary> sharedQueue) {
+	public Producer(File file, BlockingQueue<DataDictionary> sharedQueue, List<DataDictionary> analysisList) {
 		this.file = file;
 		this.sharedQueue = sharedQueue;
+		this.analysisList = analysisList;
 	}
 
 	@Override
@@ -87,6 +96,8 @@ class Producer implements Runnable {
 						dataDictionary.setByteCount(Integer.parseInt(values[6]));
 						dataDictionary.setTpSource(Integer.parseInt(values[13]));
 						dataDictionary.setTpDest(Integer.parseInt(values[14]));
+						if(dataDictionary.getTpSource() == 13562)
+							analysisList.add(dataDictionary);
 						sharedQueue.put(dataDictionary);
 						}
 					}

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Plot</title>
+<object th:include="fragments/header :: scripts" th:remove="tag"></object>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function() {
+	var csv = [], shuffleData = [], newSources= [], newFlows= [], flowCount = [], newSeriesArray = [], x, count = 0;
+	var colors = ['#DC143C','#663399','#006400','#000000','#D2691E','#008080','#808000','#FF00FF','#800080'];
+	Highcharts.setOptions({
+		global: {
+			useUTC: true
+			}
+		  });
+
+	$.getJSON('/analyse', function(data) {		
+			  if(data.lengh !== 0){
+				$.each(data, function(index, element) {
+					items = element.timeString;
+					useUTC: false;
+					x = items.split('.');
+					t = x[0].split(':');
+					y = parseInt(element.byteCount);
+					tpSource = parseInt(element.tpSource);
+					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
+			    });
+				}
+			});
+
+	var chart = new Highcharts.Chart({
+		chart : {
+			zoomType: 'x',
+			renderTo : 'container',
+			type : 'line',
+			animation : Highcharts.svg,
+			marginRight : 10,
+			useUTC : false,
+			events : {
+				load : function() {
+				var series = this.series[0];
+			  }
+			}
+		},
+		title : {
+			text : 'Data Transfer vs Time'
+		},
+		subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+		xAxis : {
+			type : 'datetime',
+			tickPixelInterval : 150
+		},
+		yAxis : [{
+			title : {
+			text : 'Bytes'
+			},
+			height: 300,
+            lineWidth: 2,
+            offset:0
+		}],
+		tooltip : {
+			formatter: function () {
+           		 return '<b>' 
+           		+ this.series.name 
+           		 + '</b><br/>' 
+           		 + Highcharts.dateFormat('%H:%M:%S.%L', this.x) 
+           		 + ' time, ' 
+           		 + this.y
+           		 + ' bytes';
+			}
+		},
+		legend : {
+			enabled : true,
+            borderWidth: 1
+		},
+		exporting : {
+			enabled : false
+		},
+		plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+		series : [ {
+			name : 'bytes',
+			yAxis: 0,
+			data : csv
+		} ]
+		
+	});
+	});
+/*]]>*/
+</script>
+</head>
+<body>
+<nav th:replace="fragments/header :: navbar"></nav>
+	<div class="container">
+		<div class="row">
+			<div class="span8">
+				<fieldset>
+					<legend>Analysis</legend>
+					<div id="container" style="min-width: 50px; height: 600px; margin: 0 auto"></div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
