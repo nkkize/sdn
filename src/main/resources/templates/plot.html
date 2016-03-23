@@ -7,7 +7,7 @@
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
-	var csv = [], shuffleData = [], newSources= [], newFlows= [], newSeriesArray = [], x, count = 0;
+	var csv = [], shuffleData = [], newSources= [], newFlows= [], flowCount = [], newSeriesArray = [], x, count = 0;
 	var colors = ['#DC143C','#663399','#006400','#000000','#D2691E','#008080','#808000','#FF00FF','#800080'];
 	Highcharts.setOptions({
 		global: {
@@ -70,11 +70,12 @@ $(document).ready(function() {
 								if($.inArray(tpDest, newFlows) == -1){
 									if($.inArray(newSource, newSources) == -1){
 									newSources.push(newSource);
+									flowCount.push(1);
 									}
 									newFlows.push(tpDest);
 									chart.addSeries({
 										yAxis: 1,
-										name: '' + newSource + ' -> ' + newDest + '',
+										name: '' + newSource + ' -> ' + newDest + ' Flow ' + flowCount[newSources.indexOf(newSource)]++ + '',
 										color: colors[newSources.indexOf(newSource)]
 					                });
 									newSeriesArray.push(chart.series[++count]);
