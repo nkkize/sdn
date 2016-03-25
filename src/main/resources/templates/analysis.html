@@ -1,45 +1,44 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Plot</title>
+<title>Analysis</title>
 <object th:include="fragments/header :: scripts" th:remove="tag"></object>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
 $(document).ready(function() {
-	var csv = [], shuffleData = [], newSources= [], newFlows= [], flowCount = [], newSeriesArray = [], x, count = 0;
-	var colors = ['#DC143C','#663399','#006400','#000000','#D2691E','#008080','#808000','#FF00FF','#800080'];
+	var csv = [];
 	Highcharts.setOptions({
 		global: {
 			useUTC: true
 			}
 		  });
 
-	$.getJSON('/analyse', function(data) {		
-			  if(data.lengh !== 0){
-				$.each(data, function(index, element) {
-					items = element.timeString;
-					useUTC: false;
-					x = items.split('.');
-					t = x[0].split(':');
-					y = parseInt(element.byteCount);
-					tpSource = parseInt(element.tpSource);
-					csv.push([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y]);
-			    });
-				}
-			});
-
 	var chart = new Highcharts.Chart({
 		chart : {
 			zoomType: 'x',
 			renderTo : 'container',
-			type : 'line',
+			type : 'spline',
 			animation : Highcharts.svg,
 			marginRight : 10,
 			useUTC : false,
 			events : {
 				load : function() {
-				var series = this.series[0];
+					var series = this.series[0];
+					$.getJSON('/analyse', function(data) {	
+						  previousValue = 0;
+						  if(data.lengh !== 0){
+							$.each(data, function(index, element) {
+								items = element.timeString;
+								useUTC: false;
+								x = items.split('.');
+								t = x[0].split(':');
+								y = parseInt(element.byteCount) + previousValue;
+								series.addPoint([Date.UTC(2015, 1, 1, t[0], t[1], t[2],x[1]),y],true,false);
+								previousValue = y;
+						    });
+							}
+						});
 			  }
 			}
 		},
@@ -56,10 +55,10 @@ $(document).ready(function() {
 		},
 		yAxis : [{
 			title : {
-			text : 'Bytes'
+			text : 'Shuffle Bytes'
 			},
-			height: 300,
-            lineWidth: 2,
+			height: 400,
+            lineWidth: 2,            
             offset:0
 		}],
 		tooltip : {
@@ -91,7 +90,8 @@ $(document).ready(function() {
 		series : [ {
 			name : 'bytes',
 			yAxis: 0,
-			data : csv
+			data : csv,
+			color: '#800080'
 		} ]
 		
 	});

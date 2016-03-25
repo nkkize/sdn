@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -81,7 +82,7 @@ public class GraphController {
 	
 	@RequestMapping(value = "/analyse", method = RequestMethod.GET)
 	public @ResponseBody List<DataDictionary> analyseData() {
-		List<DataDictionary> plotList = new ArrayList<DataDictionary>();
+		List<DataDictionary> plotList = new LinkedList<DataDictionary>();
 		DataProvider dataProvider = new DataProvider();
 		dataProvider.copyAnalysisList(plotList);
 		return plotList;
