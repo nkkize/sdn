@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.talentica.sdn.controller;
+package com.talentica.viewsdn.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.talentica.sdn.model.DataDictionary;
-import com.talentica.sdn.util.CommonUtil;
-import com.talentica.sdn.util.Constants;
-import com.talentica.sdn.util.DataProvider;
+import com.talentica.viewsdn.model.DataDictionary;
+import com.talentica.viewsdn.util.CommonUtil;
+import com.talentica.viewsdn.util.Constants;
+import com.talentica.viewsdn.util.DataProvider;
 
 /**
  * @author NarenderK

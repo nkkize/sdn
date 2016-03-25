@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.talentica.sdn.model;
+package com.talentica.viewsdn.model;
 
 /**
  * @author NarenderK

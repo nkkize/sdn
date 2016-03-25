@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.talentica.sdn.util;
+package com.talentica.viewsdn.util;
 
 import java.util.Collection;
 import java.util.Map;

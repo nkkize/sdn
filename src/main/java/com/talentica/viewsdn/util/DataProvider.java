@@ -1,4 +1,4 @@
-package com.talentica.sdn.util;
+package com.talentica.viewsdn.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.talentica.sdn.model.DataDictionary;
+import com.talentica.viewsdn.model.DataDictionary;
 
 /**
  * @author NarenderK

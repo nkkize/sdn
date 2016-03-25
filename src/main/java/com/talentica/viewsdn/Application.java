@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.talentica.sdn;
+package com.talentica.viewsdn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
